@@ -1,0 +1,47 @@
+// --- Codeforces ---
+try {
+  const cfRes = await axios.get(
+    `https://codeforces.com/api/user.rating?handle=${codeforces}`
+  );
+  const results = cfRes.data.result || [];
+
+  for (const contest of results) {
+    cfRatings.push({
+      contest_id: contest.contestId,
+      rating: contest.newRating,
+    });
+
+    await db.query(
+      `INSERT INTO codeforcesratng (contest_id, rating, user_id)
+           VALUES ($1, $2, $3)
+           ON CONFLICT (user_id, contest_id) DO UPDATE SET rating = $2`,
+      [contest.contestId, contest.newRating, userId]
+    );
+  }
+} catch (err) {
+  console.warn("Codeforces fetch failed");
+}
+
+// --- CodeChef ---
+try {
+  const ccRes = await axios.get(
+    `https://codechef-api.vercel.app/handle/${codechef}`
+  );
+  const ratingData = ccRes.data.ratingData || [];
+
+  for (const contest of ratingData) {
+    if (contest.rating) {
+      const rating = parseInt(contest.rating);
+      ccRatings.push({ contest_code: contest.code, rating });
+
+      await db.query(
+        `INSERT INTO codechefratng (contest_code, rating, user_id)
+             VALUES ($1, $2, $3)
+             ON CONFLICT (user_id, contest_code) DO UPDATE SET rating = $2`,
+        [contest.code, rating, userId]
+      );
+    }
+  }
+} catch (err) {
+  console.warn("CodeChef fetch failed");
+}
