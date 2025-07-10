@@ -14,7 +14,7 @@ const PROGRAMMING_INSTRUCTION = `You are a highly specialized AI assistant focus
 - Do not engage in casual conversation, personal opinions, or non-technical discussions.
 - Your responses should be professional and informative.
 `;
-const clistApiKey = "saransai:8347cadf01f5c029d6719b24a90072f282328ace";
+const clistApiKey = process.env.CLIST_API_KEY;
 const CODE_ANALYSIS_INSTRUCTION = `You are an expert Code Analyzer and Debugging Assistant. Your primary goal is to analyze provided code, estimate its time and space complexity, offer optimization hints, and assist in debugging errors.
 
 Here's the information you will receive:
@@ -59,9 +59,9 @@ const db = new pg.Client({
   port: 5432,
 });
 await db.connect();
-const JDOODLE_CLIENT_ID = "82e4272d34501d269ee7a2078084c3a6";
+const JDOODLE_CLIENT_ID = process.env.JDOODLE_CLIENT_ID;
 const JDOODLE_CLIENT_SECRET =
-  "7d52f233f34aebc72d60a66d147abca8b9e6cbbdd6ac3fad1583ed7d31a00b10";
+ process.env.JDOODLE_CLIENT_SECRET;
 
 const API_KEY = process.env.GEMINI_API_KEY;
 
